@@ -15,10 +15,7 @@ on:
 jobs:
   build:
     runs-on: windows-latest
-    strategy:
-      matrix:
-        dotnet: [${{ matrix.dotnet }}]
-        configuration: [Release]
+
     steps:
     - name: Checkout our code
       uses: actions/checkout@v3
