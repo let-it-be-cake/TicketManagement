@@ -1,0 +1,14 @@
+﻿@using TicketManagement.UserInterface.Models.ViewModels.UserCabinet;
+
+@model EditUserViewModel
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            @await Html.PartialAsync("_WithPassword", Model.WithPassword)
+        </div>
+        <div class="col">
+            @await Html.PartialAsync("_NoPassword", Model.NoPassword)
+        </div>
+    </div>
+</div>

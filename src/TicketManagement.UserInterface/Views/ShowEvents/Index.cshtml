@@ -1,0 +1,56 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Local
+
+<nav class="nav">
+    <button id="activeEvents" class="btn btn-primary">@Local["Active"]</button>
+    <button id="notActiveEvents" class="btn btn-primary">@Local["NoActive"]</button>
+    <form asp-controller="EditEvents" asp-action="Add" method="get">
+        <input type="submit" value="@Local["Add"]" class="btn btn-primary" />
+    </form>
+</nav>
+
+<div id="events"></div>
+
+@section ScriptsFooter
+{
+<script>
+        $(function () {
+            GetActivateEvents();
+        });
+        $('#activeEvents').on('click', function (e) {
+            GetActivateEvents();
+        });
+        $('#notActiveEvents').on('click', function (e) {
+            GetNotActivateEvents();
+        });
+        function GetNotActivateEvents() {
+                $.ajax({
+                    url: '@Url.Action("NotActivated")',
+                    type: 'POST',
+                    cache: false,
+                    async: true,
+                })
+                    .done(function (result) {
+                        $('#events').html(result);
+                    }).fail(function (xhr) {
+                        console.log('error : ' + xhr.status + ' - '
+                            + xhr.statusText + ' - ' + xhr.responseText);
+                    });
+            }
+        function GetActivateEvents() {
+            $.ajax({
+                url: '@Url.Action("Activated")',
+                type: 'POST',
+                cache: false,
+                async: true,
+            })
+                .done(function (result) {
+                    $('#events').html(result);
+                }).fail(function (xhr) {
+                    console.log('error : ' + xhr.status + ' - '
+                        + xhr.statusText + ' - ' + xhr.responseText);
+                });
+            }
+</script>
+}

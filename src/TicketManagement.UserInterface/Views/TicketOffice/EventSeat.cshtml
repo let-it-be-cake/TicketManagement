@@ -1,0 +1,102 @@
+﻿@using TicketManagement.UserInterface.Models.ViewModels;
+@using TicketManagement.UserInterface.Models.ViewModels.Enums;
+@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Local
+
+@model IEnumerable<EventSeatsViewModel>
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div class="square-table">
+                @for (int i = 1; i <= Model.Max(o => o.Row); i++)
+                {
+                    <div class="square-row-cell">
+                        @for (int j = 1; j <= Model.Max(o => o.Number); j++)
+                        {
+                            string outputValue = null;
+                            var modelWithCoord = Model.FirstOrDefault(o => o.Row == i && o.Number == j);
+
+                            bool free = modelWithCoord == null ? true : false;
+
+                            if (free)
+                            {
+                                <div class="square-col-cell square-cell square-cell-seat-unknown"></div>
+                            }
+                            else
+                            {
+                                outputValue = modelWithCoord.Row + " " + modelWithCoord.Number;
+
+                                switch (modelWithCoord.State)
+                                {
+                                    case SeatStateViewModel.Indefinite:
+                                        <div class="square-col-cell square-cell square-cell-seat-unknown">@outputValue</div>
+                                        break;
+                                    case SeatStateViewModel.NotSold:
+                                        <div class="square-col-cell square-cell square-cell-seat-wait">@outputValue</div>
+                                        break;
+                                    case SeatStateViewModel.Sold:
+                                        <div class="square-col-cell square-cell square-cell-seat-sold">@outputValue</div>
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="col">
+            <table class="table">
+                <tr>
+                    <th>@Local["Position"]</th>
+                    <th></th>
+                </tr>
+                @foreach (var eventArea in Model)
+                {
+                    if (eventArea.State != SeatStateViewModel.NotSold)
+                    {
+                        continue;
+                    }
+
+                    <tr>
+                        <td>@eventArea.Row @eventArea.Number</td>
+                        <td>
+                            <button name="@eventArea.Id" type="submit" class="btn btn-sm btn-outline-info AddToCart">
+                                @Local["AddToCart"]
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(".AddToCart").on("click", function (e) {
+        this.disabled = true;
+        this.classList.add('active')
+
+        this.textContent = '@Local["InTicket"]'
+        AddToCart(this.name);
+    });
+
+    function AddToCart(id) {
+            $.ajax({
+                url: '@Url.Action("AddToCart")',
+                type: 'POST',
+                cache: false,
+                async: true,
+                data: {
+                    id: id
+                }
+            })
+            .fail(function (xhr) {
+                console.log('error : ' + xhr.status + ' - '
+                    + xhr.statusText + ' - ' + xhr.responseText);
+            });
+        }
+</script>

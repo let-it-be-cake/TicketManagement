@@ -1,0 +1,80 @@
+﻿@using TicketManagement.UserInterface.Models.ViewModels
+
+@model RegisterViewModel
+
+@using Microsoft.AspNetCore.Builder
+@using Microsoft.AspNetCore.Localization
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Options
+
+@inject IViewLocalizer Local
+@inject IOptions<RequestLocalizationOptions> LocOptions
+
+@{
+    var timeZones = TimeZoneInfo.GetSystemTimeZones()
+                    .Select(o => new SelectListItem(o.DisplayName,
+                        o.Id));
+
+    var requestCulture = Context.Features.Get<IRequestCultureFeature>();
+    var cultureItems = LocOptions.Value.SupportedUICultures
+        .Select(c => new SelectListItem { Value = c.Name, Text = c.DisplayName })
+        .ToList();
+}
+
+<div class="card card-body-wm-40vh">
+    <div class="card-header">
+        <h2>@Local["Registration"]</h2>
+    </div>
+    <div class="card-body">
+        <form method="post" asp-controller="Account" asp-action="Register">
+            <div asp-validation-summary="ModelOnly"></div>
+            <div class="form-group">
+                <label asp-for="Name"></label><br />
+                <input class="form-control" asp-for="Name" />
+                <span asp-validation-for="Name"></span>
+            </div>
+            <div>
+                <label asp-for="Surname"></label><br />
+                <input class="form-control" asp-for="Surname" />
+                <span asp-validation-for="Surname"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Language"></label><br />
+                <select class="custom-select" name="Language"
+                        asp-items="cultureItems"
+                        asp-for="Language"></select>
+                <span asp-validation-for="Language"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TimeOffsetId"></label><br />
+
+                <select class="custom-select"
+                        asp-for="TimeOffsetId"
+                        asp-items="timeZones"></select>
+                <span asp-validation-for="TimeOffsetId"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email"></label><br />
+                <input class="form-control" asp-for="Email" />
+                <span asp-validation-for="Email"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password"></label><br />
+                <input class="form-control" asp-for="Password" />
+                <span asp-validation-for="Password"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password"></label><br />
+                <input class="form-control" asp-for="PasswordConfirm" />
+                <span asp-validation-for="PasswordConfirm"></span>
+            </div>
+            <div>
+                <div class="form-group row">
+                    <div class="col-sm-10">
+                        <button type="submit" class="btn btn-primary">@Local["Registration_button"]</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

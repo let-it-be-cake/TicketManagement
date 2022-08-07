@@ -1,0 +1,93 @@
+﻿@using TicketManagement.UserInterface.Models.ViewModels
+@using TicketManagement.Entities.Identity
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Mvc.Localization
+@using TicketManagement.UserInterface.Helper
+
+@model EventViewModel
+@inject IViewLocalizer Local
+
+@{
+    string userLanguage = User.GetClaim(nameof(TicketManagement.Entities.Identity.User.Language));
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <form method="post" asp-action="Edit">
+                        <div asp-validation-summary="ModelOnly"></div>
+                        <div class="form-group">
+                            <input hidden asp-for="ImageUrl" />
+                            <img src="~/images/@Model.ImageUrl"
+                                 height="40" width="40"
+                                 asp-append-version="true" />
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Name"></label><br />
+                            <input class="form-control" asp-for="Name" />
+                            <span asp-validation-for="Name"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Description"></label><br />
+                            <input class="form-control" asp-for="Description" />
+                            <span asp-validation-for="Description"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="StartEvent"></label><br />
+                            <input id="startEvent" type="text" class="form-control" asp-for="StartEvent" />
+                            <span asp-validation-for="StartEvent"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="EndEvent"></label><br />
+                            <input id="endEvent" type="text" class="form-control" asp-for="EndEvent" />
+                            <span asp-validation-for="EndEvent"></span>
+                        </div>
+                        <div class="form-group">
+                            <select asp-for="LayoutId" class="custom-select js-select2" placeholder="@Local["Chouse_area"]">
+                                @foreach (var layout in Model.Layouts)
+                                {
+                                    @if (Model.LayoutId == layout.Id)
+                                    {
+                                        <option selected value="@layout.Id">
+                                            @layout.ToString();
+                                        </option>
+                                    }
+                                    else
+                                    {
+                                        <option selected value="@layout.Id">
+                                            @layout.ToString();
+                                        </option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div>
+                            <input class="" type="submit" value="@Local["Save"]" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+        </div>
+    </div>
+</div>
+
+<script>
+
+        $(document).ready(function () {
+            $.datetimepicker.setLocale('@userLanguage');
+
+            @if(userLanguage == "ru" || userLanguage == "be")
+            {
+                @Html.Raw("$('#startEvent').datetimepicker({ format: 'd.m.y H:i'});\n");
+                @Html.Raw("$('#endEvent').datetimepicker({ format: 'd.m.y H:i'});\n");
+            }
+            else{
+                @Html.Raw("$('#startEvent').datetimepicker();\n");
+                @Html.Raw("$('#endEvent').datetimepicker();\n");
+            }
+    });
+</script>

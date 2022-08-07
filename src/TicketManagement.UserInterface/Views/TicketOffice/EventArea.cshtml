@@ -1,0 +1,66 @@
+﻿@using TicketManagement.UserInterface.Models.ViewModels;
+@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Local
+
+@model IEnumerable<EventAreaViewModel>
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div class="custom-container">
+
+                <div class="square-table">
+                    @for (int i = 1; i <= Model.Max(o => o.CoordX); i++)
+                    {
+                        <div class="square-row-cell">
+                            @for (int j = 1; j <= Model.Max(o => o.CoordY); j++)
+                            {
+                                string outputValue = null;
+                                var modelWithCoord = Model.FirstOrDefault(o => o.CoordX == i && o.CoordY == j);
+
+                                bool free = modelWithCoord == null ? true : false;
+
+                                outputValue = modelWithCoord?.CoordX + " " + modelWithCoord?.CoordY;
+
+                                if (free)
+                                {
+                                    <div class="square-col-cell square-cell square-cell-seat-unknown">@outputValue</div>
+                                }
+                                else
+                                {
+                                    <div class="square-col-cell square-cell square-cell-seat-wait">@outputValue</div>
+                                }
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <table class="table">
+                <tr>
+                    <th>@Html.DisplayNameFor(o => o.Description)</th>
+                    <th>@Html.DisplayNameFor(o => o.Price)</th>
+                    <th>@Local["Position"]</th>
+                    <th></th>
+                </tr>
+                @foreach (var eventArea in Model)
+                {
+                    <tr>
+                        <td>@eventArea.Description</td>
+                        <td>@eventArea.Price</td>
+                        <td>@eventArea.CoordX @eventArea.CoordY</td>
+                        <td>
+                            <form asp-action="EventSeat" asp-route-id="@eventArea.Id" method="post">
+                                <button type="submit" class="btn btn-sm btn-outline-info">
+                                    @Local["Show"]
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TicketManagement.DataAccess\TicketManagement.DataAccess.csproj" />
+    <ProjectReference Include="..\TicketManagement.Entities\TicketManagement.Entities.csproj" />
+  </ItemGroup>
+	<ItemGroup>
+		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+			<_Parameter1>TicketManagement.UnitTests</_Parameter1>
+		</AssemblyAttribute>
+		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+			<_Parameter1>TicketManagement.IntegrationTests</_Parameter1>
+		</AssemblyAttribute>
+	</ItemGroup>
+	<ItemGroup>
+	  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.5" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="TicketManager\" />
+	</ItemGroup>
+</Project>

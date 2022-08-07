@@ -1,0 +1,52 @@
+﻿@using TicketManagement.UserInterface.Models.Maps;
+@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Local
+
+@model IEnumerable<UserViewModel>
+@{
+    ViewBag.Title = Local["Title"];
+}
+
+<a asp-action="Create">@Local["Create"]</a>
+
+<table class="table">
+    <tr>
+        <th>@Html.DisplayNameFor(o => o.Email)</th>
+        <th>@Html.DisplayNameFor(o => o.FirstName)</th>
+        <th>@Html.DisplayNameFor(o => o.Surname)</th>
+        <th>@Html.DisplayNameFor(o => o.Money)</th>
+        <th></th>
+    </tr>
+    @foreach (var user in Model)
+    {
+        <tr>
+            <td>@user.Email</td>
+            <td>@user.FirstName</td>
+            <td>@user.Surname</td>
+            <td>@user.Money</td>
+            <td>
+                @if (user.IsBlocked)
+                {
+
+                    <form asp-action="Unblock" asp-route-id="@user.Id" method="post">
+                        <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@user.Id">@Local["Edit"]</a>
+                        <button type="submit" class="btn btn-sm btn-danger">
+                                @Local["UnBlock"]
+                        </button>
+                    </form>
+                }
+                else
+                {
+
+                    <form asp-action="Block" asp-route-id="@user.Id" method="post">
+                        <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@user.Id">@Local["Edit"]</a>
+                        <button type="submit" class="btn btn-sm btn-danger">
+                                @Local["Block"]
+                        </button>
+                    </form>
+                }
+            </td>
+        </tr>
+    }
+</table>

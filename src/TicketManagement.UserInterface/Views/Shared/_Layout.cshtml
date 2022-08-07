@@ -1,0 +1,112 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Local
+
+@{
+    string admin = "Admin";
+    string manager = "Manager";
+    string user = "User";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - TicketManagement.UserInterface</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/jquery-datetimepicker/datetimepicker.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/ajax/dist/ajax.min.js"></script>
+    <script src="~/lib/php-date-formatter.min.js/php.date.formatter.min.js"></script>
+    <script src="~/lib/jquery-mousewheel.js/jquery.mousewheel.js"></script>
+    <script src="~/lib/jquery-datetimepicker/datetimepicker.full.js"></script>
+    <script src="~/lib/momentjs/moment.js"></script>
+    @await RenderSectionAsync("ScriptsHeader", required: false)
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <a class="navbar-brand" asp-area="" asp-controller="UserCabinet" asp-action="Index">@Local["Cabinet"]</a>
+                }
+                else
+                {
+                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">TicketManagement.UserInterface</a>
+                }
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">@Local["Home"]</a>
+                        </li>
+                        @if (User.IsInRole(user)|| User.IsInRole(admin))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Cart" asp-action="Index">@Local["Cart"]</a>
+                            </li>
+                        }
+                        @if (User.IsInRole(manager) || User.IsInRole(admin))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="EditEventAreas" asp-action="Index">@Local["Price"]</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="ShowEvents" asp-action="Index">@Local["ManageEvents"]</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Import" asp-action="Index">@Local["Import"]</a>
+                            </li>
+                        }
+                        @if (User.IsInRole(admin))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="UsersManage" asp-action="Index">@Local["ManageUsers"]</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+                <div class="navbar">
+                    @{
+                        ViewData["Title"] = Local["Title"];
+                    }
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <span>@User.Identity.Name</span>
+
+                        <form method="post" asp-controller="Account" asp-action="Logout">
+                            <input class="btn btn-outline-danger mx-3" type="submit" value="@Local["Exit"]" />
+                        </form>
+                    }
+                    else
+                    {
+                        <a class="btn btn-outline-info mx-1" asp-controller="Account" asp-action="Login">@Local["Login"]</a>
+                        <a class="btn btn-outline-info mx-1" asp-controller="Account" asp-action="Register">@Local["Register"]</a>
+                    }
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+    </footer>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("ScriptsFooter", required: false)
+
+</body>
+</html>

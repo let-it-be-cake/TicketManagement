@@ -1,0 +1,87 @@
+﻿@using TicketManagement.UserInterface.Models.ViewModels;
+@using Microsoft.AspNetCore.Mvc.Localization
+
+@model IEnumerable<EventAreaViewModel>
+
+@inject IViewLocalizer Local
+
+<div class="container">
+    <div class="row">
+        <div>
+            <table class="table col-2">
+                <tr>
+                    <th hidden></th>
+                    <th>@Html.DisplayNameFor(o => o.Name)</th>
+                    <th>@Html.DisplayNameFor(o => o.Description)</th>
+                    <th>@Html.DisplayNameFor(o => o.DateTimeStart)</th>
+                    <th>@Html.DisplayNameFor(o => o.DateTimeEnd)</th>
+                    <th>@Html.DisplayNameFor(o => o.ImageUrl)</th>
+                    <th>@Html.DisplayNameFor(o => o.Price)</th>
+                    <th></th>
+                </tr>
+                @foreach (var eventArea in Model)
+                {
+                    <tr>
+                        <td hidden>
+                            <input class="setPriceId" type="hidden" hidden value="@eventArea.Id" />
+                        </td>
+                        <td>@eventArea.Name</td>
+                        <td>@eventArea.Description</td>
+                        <td>@eventArea.DateTimeStart</td>
+                        <td>@eventArea.DateTimeEnd</td>
+                        <td>
+                            <img class="img-thumbnail" src="~/images/@eventArea.ImageUrl" alt="Alternate Text" />
+                        </td>
+                        <td>
+                            <label asp-for="@eventArea.Price"></label><br />
+                            <input class="setPricePrice" value="@eventArea.Price" />
+                            <span asp-validation-for="@eventArea.Price"></span>
+                        </td>
+                        <td></td>
+                    </tr>
+                }
+            </table>
+            <button id="sendPrice" class="btn btn-primary">@Local["Save"]</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        $('#sendPrice').click(function () {
+
+            let ids = document.querySelectorAll(".setPriceId");
+            let prices = document.querySelectorAll(".setPricePrice");
+
+            let eventAreaPrices = [];
+
+            for (var i = 0; i < ids.length; i++) {
+                if (prices[i].value === "")
+                    continue;
+
+                if (prices[i].value.replace(",", ".") < 0) {
+                    prices[i].value = 0; 
+                }
+
+                eventAreaPrices.push({
+                    'EventAreaId': ids[i].value,
+                    'Price': prices[i].value.replace(",", "."),
+                })
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("Index")',
+                contentType: 'application/json',
+                cache: false,
+                async: true,
+                data: JSON.stringify(eventAreaPrices),
+            }).done(function () {
+                window.location.reload();
+            });
+
+        });
+
+    });
+</script>

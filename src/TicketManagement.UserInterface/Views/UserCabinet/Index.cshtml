@@ -1,0 +1,50 @@
+﻿@using TicketManagement.UserInterface.Models.ViewModels.UserCabinet;
+@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Local
+
+@model UserCabinetNoPasswordViewModel
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    @Local["PersonalAccount"]
+                </div>
+                <div class="card-body">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <label asp-for="Name" class="input-group-text"></label>
+                        </div>
+                        <input type="text" class="form-control disabled" asp-for="Name" disabled />
+                    </div>
+                    <div class="input-group my-3">
+                        <div class="input-group-prepend">
+                            <label asp-for="Surname" class="input-group-text"></label>
+                        </div>
+                        <input class="form-control disabled" asp-for="Surname" disabled />
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group m-2">
+                            <form asp-action="History" method="get">
+                                <button class="btn btn-info" type="submit">
+                                    @Local["History"]
+                                </button>
+                            </form>
+                        </div>
+                        <div class="form-group m-2">
+                            <form asp-action="Edit" method="get">
+                                <button class="btn btn-warning" type="submit">
+                                    @Local["Edit"]
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+        </div>
+    </div>
+</div>

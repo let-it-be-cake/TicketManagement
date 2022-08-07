@@ -1,0 +1,37 @@
+﻿@using TicketManagement.UserInterface.Models.ViewModels;
+@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Local
+
+@model IEnumerable<TicketViewModel>
+
+
+<table class="table">
+    <tr>
+        <th>@Html.DisplayNameFor(o => o.Name)</th>
+        <th>@Html.DisplayNameFor(o => o.Description)</th>
+        <th>@Html.DisplayNameFor(o => o.StartEventDate)</th>
+        <th>@Html.DisplayNameFor(o => o.EndEventDate)</th>
+        <th>@Html.DisplayNameFor(o => o.Price)</th>
+        <th>@Html.DisplayNameFor(o => o.EventSeats)</th>
+    </tr>
+    @foreach (var ticket in Model)
+    {
+        <tr>
+            <td>@ticket.Name</td>
+            <td>@ticket.Description</td>
+            <td>@ticket.StartEventDate</td>
+            <td>@ticket.EndEventDate</td>
+            <td>@ticket.Price</td>
+            <td>
+                <div class="">
+                    @foreach (var eventSeat in ticket.EventSeats)
+                    {
+                        var rowNumber = @eventSeat.Row + " " + @eventSeat.Number;
+                        <div>@rowNumber</div>
+                    }
+                </div>
+            </td>
+        </tr>
+    }
+</table>

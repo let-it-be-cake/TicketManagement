@@ -1,0 +1,86 @@
+﻿@using TicketManagement.UserInterface.Models.ViewModels
+@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Local
+
+@model IEnumerable<EventViewModel>
+
+@{
+    Layout = null;
+}
+
+<table class="table">
+    <tr>
+        <th>@Html.DisplayNameFor(o => o.Name)</th>
+        <th>@Html.DisplayNameFor(o => o.Description)</th>
+        <th>@Html.DisplayNameFor(o => o.StartEvent)</th>
+        <th>@Html.DisplayNameFor(o => o.EndEvent)</th>
+        <th></th>
+        <th></th>
+    </tr>
+    @foreach (var evnt in Model)
+    {
+        <tr>
+            <td>@evnt.Name</td>
+            <td>@evnt.Description</td>
+            <td>@evnt.StartEvent</td>
+            <td>@evnt.EndEvent</td>
+            <td>
+                <form asp-controller="EditEvents" asp-action="Edit" asp-route-id="@evnt.Id" method="get">
+                    <button type="submit" class="btn btn-sm btn-outline-info">
+                        @Local["Edit"]
+                    </button>
+                </form>
+            </td>
+            <td>
+                <button name="@evnt.Id" type="submit" class="deleteButton btn btn-sm btn-danger">
+                    @Local["Delete"]
+                </button>
+            </td>
+        </tr>
+    }
+</table>
+
+<script>
+        $('.editButton').on('click', function (e) {
+            this.disabled = true;
+            EditEvent(this.name);
+        });
+
+        $('.deleteButton').on('click', function (e) {
+            this.disabled = true;
+            DeleteEvent(this.name);
+        });
+
+        function DeleteEvent(id) {
+                $.ajax({
+                    url: '@Url.Action("Delete", "EditEvents")',
+                    type: 'POST',
+                    cache: false,
+                    async: true,
+                    data: {
+                        id: id
+                    }
+                })
+                    .fail(function (xhr) {
+                        console.log('error : ' + xhr.status + ' - '
+                            + xhr.statusText + ' - ' + xhr.responseText);
+                    });
+            }
+
+        function EditEvent(id) {
+            $.ajax({
+                url: '@Url.Action("Edit", "EditEvents")',
+                type: 'GET',
+                cache: false,
+                async: true,
+                data: {
+                    id: id
+                }
+            })
+                .fail(function (xhr) {
+                    console.log('error : ' + xhr.status + ' - '
+                        + xhr.statusText + ' - ' + xhr.responseText);
+                });
+            }
+</script>

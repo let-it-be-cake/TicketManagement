@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Extension\**" />
+    <EmbeddedResource Remove="Extension\**" />
+    <None Remove="Extension\**" />
+  </ItemGroup>
+
+
+	<ItemGroup>
+		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+			<_Parameter1>TicketManagement.IntegrationTests</_Parameter1>
+		</AssemblyAttribute>
+	</ItemGroup>
+
+
+	<ItemGroup>
+	  <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+	  <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.5" />
+	  <PackageReference Include="Microsoft.Data.SqlClient" Version="2.1.2" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.5" />
+	  <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\TicketManagement.Entities\TicketManagement.Entities.csproj" />
+	</ItemGroup>
+</Project>

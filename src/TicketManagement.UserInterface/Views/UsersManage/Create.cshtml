@@ -1,0 +1,59 @@
+﻿@using TicketManagement.UserInterface.Models.ViewModels;
+
+@model RegisterViewModel
+
+@using Microsoft.AspNetCore.Builder
+@using Microsoft.AspNetCore.Localization
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Options
+
+@inject IViewLocalizer Local
+@inject IOptions<RequestLocalizationOptions> LocOptions
+
+@{
+    var requestCulture = Context.Features.Get<IRequestCultureFeature>();
+    var cultureItems = LocOptions.Value.SupportedUICultures
+        .Select(c => new SelectListItem { Value = c.Name, Text = c.DisplayName })
+        .ToList();
+}
+@{
+    ViewBag.Title = Local["Title"];
+}
+<form method="post" asp-action="Create">
+    <div asp-validation-summary="ModelOnly"></div>
+    <div>
+        <label asp-for="Name"></label><br />
+        <input asp-for="Name" />
+        <span asp-validation-for="Name"></span>
+    </div>
+    <div>
+        <label asp-for="Surname"></label><br />
+        <input asp-for="Surname" />
+        <span asp-validation-for="Surname"></span>
+    </div>
+    <div>
+        <label asp-for="Language"></label><br />
+        <select name="Language"
+                asp-items="cultureItems"
+                asp-for="Language"></select>
+        <span asp-validation-for="Language"></span>
+    </div>
+    <div>
+        <label asp-for="Email"></label><br />
+        <input asp-for="Email" />
+        <span asp-validation-for="Email"></span>
+    </div>
+    <div>
+        <label asp-for="Password"></label><br />
+        <input asp-for="Password" />
+        <span asp-validation-for="Password"></span>
+    </div>
+    <div>
+        <label asp-for="PasswordConfirm"></label><br />
+        <input asp-for="PasswordConfirm" />
+        <span asp-validation-for="PasswordConfirm"></span>
+    </div>
+    <div>
+        <input type="submit" value="@Local["Add"]" class="btn btn-outline-secondary" />
+    </div>
+</form>
