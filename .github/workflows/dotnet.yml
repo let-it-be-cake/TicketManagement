@@ -14,7 +14,7 @@ on:
       - main
 
 jobs:
-  Build and run tests:
+  Build_and_run_tests:
     runs-on: windows-latest
 
     steps:
