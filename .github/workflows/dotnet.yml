@@ -1,0 +1,39 @@
+name: APS.NET-Core
+
+env:
+  DOTNET_VERSION : 5.0.x
+  TEST_PROJECT_PATH: test/TicketManagement.UnitTests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        dotnet: [${{ matrix.dotnet }}]
+        configuration: [Release]
+    steps:
+    - name: Checkout our code
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build project
+      run: dotnet build --no-restore
+
+    - name: Run unit tests
+      run: dotnet test ${{ env.TEST_PROJECT_PATH }} --no-restore --no-build
