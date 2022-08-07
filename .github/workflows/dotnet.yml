@@ -27,7 +27,7 @@ jobs:
       uses: microsoft/setup-msbuild@v1.0.2
 
     - name: Restore the application
-      run: msbuild ${{ env:SOLUTION_NAME }} /t:Restore /p:Configuration=Release
+      run: msbuild ${{ env.SOLUTION_NAME }} /t:Restore /p:Configuration=Release
 
     - name: Run unit tests
       run: dotnet test ${{ env.TEST_PROJECT_PATH }} --no-restore --no-build
