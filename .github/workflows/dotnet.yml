@@ -18,10 +18,13 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout our code
+    - name: Code Checkout
       uses: actions/checkout@v3
+
+    - name: Set up dotnet
+      uses: actions/setup-dotnet@v2
       with:
-        fetch-depth: 0
+        dotnet-version: ${{ env.DOTNET_VERSION }}
 
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v1.0.2
@@ -30,4 +33,4 @@ jobs:
       run: msbuild ${{ env.SOLUTION_NAME }} /t:Build /p:Configuration=Debug /v:minimal
 
     - name: Run unit tests
-      run: dotnet test ${{ env.TEST_PROJECT_PATH }} --no-build --no-restore
+      run: dotnet test ${{ env.TEST_PROJECT_PATH }} --no-build
