@@ -30,10 +30,10 @@ jobs:
       uses: microsoft/setup-msbuild@v1.0.2
 
     - name: Restore packages
-      run: nuget restore ${{ env.SOLUTION_NAME }} /v:minimal
+      run: msbuild -restore ${{ env.SOLUTION_NAME }} -v:minimal
 
     - name: Build project
-      run: msbuild ${{ env.SOLUTION_NAME }} /t:Rebuild /p:RestorePackages="True" /p:Configuration="Release" /v:minimal /p:DebugSymbols="False" /p:DebugType="None"
+      run: msbuild ${{ env.SOLUTION_NAME }} -t:Rebuild -p:RestorePackages="True" -p:Configuration="Release" -v:minimal -p:DebugSymbols="False" -p:DebugType="None"
 
     - name: Run unit tests
       run: dotnet test ${{ env.TEST_PROJECT_PATH }} --no-build --no-restore -p:Configuration=Release
